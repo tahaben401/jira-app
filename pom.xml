@@ -22,5 +22,6 @@
         <module>infrastructure/Api-gateway</module>
         <module>services/auth-service</module>
         <module>services/project-service</module>
+        <module>services/task-service</module>
     </modules>
 </project>

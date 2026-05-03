@@ -1,4 +1,4 @@
-package com.gateway.project.projectservice.client;
+package com.gateway.project.taskservice.client;
 
 import lombok.*;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -7,13 +7,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
-@FeignClient(name = "AUTH-SERVICE", path = "/api/v1/auth")
+@FeignClient(name = "auth-service", path = "/api/v1/auth")
 public interface AuthServiceClient {
 
     @PostMapping("/users/batch")
     ApiResponse<List<UserSummary>> getUsersByIds(@RequestBody List<Long> ids);
-
-    // ── DTOs matching auth-service response ──────────────────────────────────
 
     @Data @NoArgsConstructor @AllArgsConstructor
     class ApiResponse<T> {
@@ -26,7 +24,5 @@ public interface AuthServiceClient {
         private Long id;
         private String email;
         private String fullName;
-        private String role;
-        private boolean enabled;
     }
 }
