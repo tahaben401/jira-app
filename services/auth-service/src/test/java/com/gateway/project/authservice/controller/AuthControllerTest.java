@@ -15,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -26,6 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(AuthController.class)
 @Import({SecurityConfig.class, JwtAuthenticationFilter.class, GlobalExceptionHandler.class})
+@TestPropertySource(properties = "internal.service-token=test-internal-token")
 @DisplayName("AuthController")
 class AuthControllerTest {
 
@@ -305,11 +307,33 @@ class AuthControllerTest {
         when(authService.getUsersByIds(List.of(1L, 2L))).thenReturn(summaries);
 
         mockMvc.perform(post(BASE + "/users/batch")
+                        .header("X-Internal-Service-Token", "test-internal-token")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(List.of(1L, 2L))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.length()").value(2))
                 .andExpect(jsonPath("$.data[0].email").value("a@test.com"));
+    }
+
+    @Test @DisplayName("POST /users/batch — 401 without internal service token")
+    void getUsersByIdsWithoutInternalToken() throws Exception {
+        mockMvc.perform(post(BASE + "/users/batch")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(List.of(1L, 2L))))
+                .andExpect(status().isUnauthorized());
+
+        verify(authService, never()).getUsersByIds(anyList());
+    }
+
+    @Test @DisplayName("POST /users/batch — 401 with wrong internal service token")
+    void getUsersByIdsWithWrongInternalToken() throws Exception {
+        mockMvc.perform(post(BASE + "/users/batch")
+                        .header("X-Internal-Service-Token", "wrong-token")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(List.of(1L, 2L))))
+                .andExpect(status().isUnauthorized());
+
+        verify(authService, never()).getUsersByIds(anyList());
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────────

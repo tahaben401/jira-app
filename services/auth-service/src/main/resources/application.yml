@@ -52,3 +52,5 @@ logging:
   level:
     com.gateway.project: TRACE
     org.springframework.security: INFO
+internal:
+  service-token: mysecret123

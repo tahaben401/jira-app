@@ -41,3 +41,5 @@ feign:
 logging:
   level:
     com.gateway.project: DEBUG
+internal:
+  service-token: mysecret123
