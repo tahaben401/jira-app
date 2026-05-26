@@ -2,6 +2,7 @@ package com.gateway.project.apigateway.filter;
 
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -25,8 +26,10 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
             "/api/v1/auth/validate"
     );
 
-    public JwtAuthenticationFilter(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.baseUrl("http://localhost:8081").build();
+    public JwtAuthenticationFilter(
+            WebClient.Builder webClientBuilder,
+            @Value("${auth.service.base-url:http://localhost:8081}") String authServiceBaseUrl) {
+        this.webClient = webClientBuilder.baseUrl(authServiceBaseUrl).build();
     }
 
     @Override
