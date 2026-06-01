@@ -11,17 +11,20 @@ import com.gateway.project.authservice.security.UserDetailsServiceImpl;
 import com.gateway.project.authservice.service.AuthService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Map;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -34,9 +37,9 @@ class AuthControllerTest {
     @Autowired MockMvc       mockMvc;
     @Autowired ObjectMapper  mapper;
 
-    @MockBean AuthService            authService;
-    @MockBean JwtService             jwtService;
-    @MockBean UserDetailsServiceImpl userDetailsService;
+    @MockitoBean AuthService            authService;
+    @MockitoBean JwtService             jwtService;
+    @MockitoBean UserDetailsServiceImpl userDetailsService;
 
     private static final String BASE = "/api/v1/auth";
 
@@ -189,6 +192,7 @@ class AuthControllerTest {
     // ── POST /logout ──────────────────────────────────────────────────────────
 
     @Nested @DisplayName("POST /logout")
+    @WithMockUser
     class Logout {
 
         @Test @DisplayName("200 on successful logout")
@@ -197,6 +201,8 @@ class AuthControllerTest {
             doNothing().when(authService).logout("my-rt");
 
             mockMvc.perform(post(BASE + "/logout")
+                            .with(user("test"))
+                            .with(csrf())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(mapper.writeValueAsString(req)))
                     .andExpect(status().isOk())
@@ -207,6 +213,7 @@ class AuthControllerTest {
     // ── POST /logout-all ──────────────────────────────────────────────────────
 
     @Nested @DisplayName("POST /logout-all")
+    @WithMockUser
     class LogoutAll {
 
         @Test @DisplayName("200 when X-User-Id header is provided")
@@ -214,6 +221,8 @@ class AuthControllerTest {
             doNothing().when(authService).logoutAll(1L);
 
             mockMvc.perform(post(BASE + "/logout-all")
+                            .with(user("test"))
+                            .with(csrf())
                             .header("X-User-Id", "1"))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.success").value(true));
@@ -253,6 +262,7 @@ class AuthControllerTest {
     // ── GET /users/{id} ───────────────────────────────────────────────────────
 
     @Nested @DisplayName("GET /users/{id}")
+    @WithMockUser
     class GetUserById {
 
         @Test @DisplayName("200 with user summary")
@@ -263,7 +273,7 @@ class AuthControllerTest {
 
             when(authService.getUserById(1L)).thenReturn(summary);
 
-            mockMvc.perform(get(BASE + "/users/1"))
+            mockMvc.perform(get(BASE + "/users/1").with(user("test")))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.data.id").value(1))
                     .andExpect(jsonPath("$.data.email").value("alice@test.com"));
@@ -274,7 +284,7 @@ class AuthControllerTest {
             when(authService.getUserById(99L))
                     .thenThrow(new AuthException.NotFoundException("User", 99L));
 
-            mockMvc.perform(get(BASE + "/users/99"))
+            mockMvc.perform(get(BASE + "/users/99").with(user("test")))
                     .andExpect(status().isNotFound())
                     .andExpect(jsonPath("$.success").value(false));
         }
@@ -283,6 +293,7 @@ class AuthControllerTest {
     // ── GET /me ───────────────────────────────────────────────────────────────
 
     @Test @DisplayName("GET /me — 200 with current user profile")
+    @WithMockUser
     void getMe() throws Exception {
         var summary = UserSummary.builder()
                 .id(2L).email("bob@test.com").fullName("Bob")
@@ -290,7 +301,9 @@ class AuthControllerTest {
 
         when(authService.getUserById(2L)).thenReturn(summary);
 
-        mockMvc.perform(get(BASE + "/me").header("X-User-Id","2"))
+        mockMvc.perform(get(BASE + "/me")
+                        .with(user("test"))
+                        .header("X-User-Id","2"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.email").value("bob@test.com"))
                 .andExpect(jsonPath("$.data.role").value("QA"));
@@ -345,12 +358,5 @@ class AuthControllerTest {
                 .userId(userId).email(email)
                 .fullName("Test User").role("DEVELOPER")
                 .build();
-    }
-
-    // static import helper to avoid full java.util.Map import issues in older test runners
-    private static java.util.Map<String,String> Map(String... kv) {
-        var m = new java.util.HashMap<String,String>();
-        for (int i = 0; i < kv.length; i += 2) m.put(kv[i], kv[i+1]);
-        return m;
     }
 }
