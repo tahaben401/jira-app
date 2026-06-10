@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation, Navigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext.jsx'
 import { useToast } from '../context/ToastContext.jsx'
 import { Field, Input } from '../components/ui.jsx'
+import { Logo } from '../components/Icons.jsx'
 
 export default function Login() {
   const { login, isAuthenticated } = useAuth()
@@ -34,7 +35,8 @@ export default function Login() {
     <div className="auth-wrap">
       <div className="auth-card">
         <div className="auth-brand">
-          <span className="brand-mark">A</span> Atlas
+          <Logo size={34} />
+          <span className="wordmark">Atlas</span>
         </div>
         <div className="card card-pad">
           <h1>Content de vous revoir</h1>

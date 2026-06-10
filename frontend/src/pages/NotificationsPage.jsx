@@ -4,6 +4,7 @@ import { useToast } from '../context/ToastContext.jsx'
 import { useAuth } from '../context/AuthContext.jsx'
 import { refreshUnread } from '../components/Layout.jsx'
 import { Loading, Empty, Badge, Field, Input, Textarea, EnumSelect } from '../components/ui.jsx'
+import { Icon } from '../components/Icons.jsx'
 import { Modal } from '../components/Modal.jsx'
 import { NOTIF_TYPES, label, badgeColor } from '../lib/constants.js'
 import { relativeTime, formatDateTime } from '../lib/format.js'
@@ -77,7 +78,7 @@ export default function NotificationsPage() {
       {loading ? (
         <Loading />
       ) : items.length === 0 ? (
-        <Empty icon="🔔" title={filter === 'unread' ? 'Aucune notification non lue' : 'Aucune notification'}>
+        <Empty icon={<Icon name="bell" size={22} />} title={filter === 'unread' ? 'Aucune notification non lue' : 'Aucune notification'}>
           Utilisez « Créer (test) » pour générer une notification et tester le service.
         </Empty>
       ) : (
@@ -92,8 +93,10 @@ export default function NotificationsPage() {
                 background: n.read ? 'var(--surface)' : 'var(--accent-soft)',
               }}
             >
-              <span className={`dot badge badge-${badgeColor(n.type)}`}
-                style={{ width: 9, height: 9, padding: 0, borderRadius: '50%', marginTop: 6, flexShrink: 0 }} />
+              <span className={`badge badge-${badgeColor(n.type)}`}
+                style={{ background: 'transparent', padding: 0, height: 'auto', gap: 0, marginTop: 6, flexShrink: 0 }}>
+                <span className="dot" style={{ width: 8, height: 8, borderRadius: '50%' }} />
+              </span>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div className="flex items-center gap-8">
                   <strong style={{ fontSize: 14 }}>{n.title}</strong>

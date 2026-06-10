@@ -3,6 +3,7 @@ import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext.jsx'
 import { notificationsApi } from '../api/notifications.js'
 import { Avatar } from './ui.jsx'
+import { Icon, Logo } from './Icons.jsx'
 import { label } from '../lib/constants.js'
 
 // Permet à n'importe quelle page de demander un rafraîchissement du compteur
@@ -12,9 +13,9 @@ export function refreshUnread() {
 }
 
 const NAV = [
-  { to: '/projects', icon: '▦', label: 'Projets' },
-  { to: '/my-tasks', icon: '☑', label: 'Mes tâches' },
-  { to: '/notifications', icon: '🔔', label: 'Notifications', badge: true },
+  { to: '/projects', icon: 'board', label: 'Projets' },
+  { to: '/my-tasks', icon: 'tasks', label: 'Mes tâches' },
+  { to: '/notifications', icon: 'bell', label: 'Notifications', badge: true },
 ]
 
 export default function Layout() {
@@ -43,8 +44,8 @@ export default function Layout() {
     <div className="shell">
       <aside className="sidebar">
         <div className="brand">
-          <span className="brand-mark">A</span>
-          Atlas
+          <Logo size={26} />
+          <span className="wordmark">Atlas</span>
         </div>
         <nav className="nav">
           <div className="nav-label">Espace de travail</div>
@@ -54,14 +55,14 @@ export default function Layout() {
               to={item.to}
               className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
             >
-              <span className="ic">{item.icon}</span>
+              <span className="ic"><Icon name={item.icon} size={17} /></span>
               {item.label}
               {item.badge && unread > 0 && <span className="nav-count">{unread}</span>}
             </NavLink>
           ))}
           <div className="nav-label">Compte</div>
           <NavLink to="/profile" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-            <span className="ic">◷</span>
+            <span className="ic"><Icon name="user" size={17} /></span>
             Mon profil
           </NavLink>
         </nav>
@@ -81,7 +82,7 @@ export default function Layout() {
                 <div style={{ fontWeight: 600, fontSize: 13 }}>{user?.fullName}</div>
                 <div className="muted" style={{ fontSize: 11.5 }}>{label(user?.role)}</div>
               </span>
-              <span className="muted" style={{ fontSize: 10 }}>▾</span>
+              <span className="muted" style={{ display: 'flex' }}><Icon name="chevron" size={13} /></span>
             </button>
             {menuOpen && (
               <>
@@ -90,10 +91,10 @@ export default function Layout() {
                   <div style={{ padding: '8px 10px' }} className="muted truncate">{user?.email}</div>
                   <div className="divider" style={{ margin: '4px 0' }} />
                   <button className="nav-item" style={{ width: '100%' }} onClick={() => { setMenuOpen(false); navigate('/profile') }}>
-                    <span className="ic">◷</span> Profil & sécurité
+                    <span className="ic"><Icon name="user" size={16} /></span> Profil &amp; sécurité
                   </button>
                   <button className="nav-item" style={{ width: '100%', color: 'var(--red)' }} onClick={onLogout}>
-                    <span className="ic">⏻</span> Se déconnecter
+                    <span className="ic" style={{ color: 'var(--red)' }}><Icon name="power" size={16} /></span> Se déconnecter
                   </button>
                 </div>
               </>

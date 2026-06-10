@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react'
 import { tasksApi } from '../../api/tasks.js'
 import { useToast } from '../../context/ToastContext.jsx'
 import { Loading, Empty, Badge, Select } from '../ui.jsx'
+import { Icon } from '../Icons.jsx'
 import TaskModal from './TaskModal.jsx'
 import { label, TYPE_ICON } from '../../lib/constants.js'
 
@@ -44,7 +45,7 @@ export default function BacklogTab({ project, members, sprints }) {
       </div>
 
       {tasks.length === 0 ? (
-        <Empty icon="🗂" title="Backlog vide">Toutes les tâches sont déjà planifiées dans un sprint.</Empty>
+        <Empty icon={<Icon name="list" size={22} />} title="Backlog vide">Toutes les tâches sont déjà planifiées dans un sprint.</Empty>
       ) : (
         <div className="card">
           <table className="table">

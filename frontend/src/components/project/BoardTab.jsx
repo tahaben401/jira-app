@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react'
 import { tasksApi } from '../../api/tasks.js'
 import { useToast } from '../../context/ToastContext.jsx'
 import { Loading, Empty, Badge, Avatar, EnumSelect, Select } from '../ui.jsx'
+import { Icon } from '../Icons.jsx'
 import TaskModal from './TaskModal.jsx'
 import { TASK_STATUS, TASK_TYPES, label, badgeColor, TYPE_ICON } from '../../lib/constants.js'
 
@@ -86,7 +87,9 @@ export default function BoardTab({ project, members, sprints }) {
               onDrop={() => onDrop(status)}
             >
               <div className="col-head">
-                <span className={`dot badge badge-${badgeColor(status)}`} style={{ width: 8, height: 8, padding: 0, borderRadius: '50%' }} />
+                <span className={`badge badge-${badgeColor(status)}`} style={{ background: 'transparent', padding: 0, height: 'auto', gap: 0 }}>
+                  <span className="dot" style={{ width: 7, height: 7, borderRadius: '50%' }} />
+                </span>
                 {label(status)}
                 <span className="n">{items.length}</span>
               </div>
@@ -121,7 +124,7 @@ export default function BoardTab({ project, members, sprints }) {
       </div>
 
       {tasks.length === 0 && (
-        <Empty icon="☑" title="Aucune tâche dans cette vue">Créez une tâche pour la voir apparaître sur le tableau.</Empty>
+        <Empty icon={<Icon name="tasks" size={22} />} title="Aucune tâche dans cette vue">Créez une tâche pour la voir apparaître sur le tableau.</Empty>
       )}
 
       {creating && (

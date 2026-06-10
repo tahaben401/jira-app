@@ -3,6 +3,7 @@ import { Link, useNavigate, Navigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext.jsx'
 import { useToast } from '../context/ToastContext.jsx'
 import { Field, Input, EnumSelect } from '../components/ui.jsx'
+import { Logo } from '../components/Icons.jsx'
 import { USER_ROLES } from '../lib/constants.js'
 
 export default function Register() {
@@ -35,7 +36,8 @@ export default function Register() {
     <div className="auth-wrap">
       <div className="auth-card">
         <div className="auth-brand">
-          <span className="brand-mark">A</span> Atlas
+          <Logo size={34} />
+          <span className="wordmark">Atlas</span>
         </div>
         <div className="card card-pad">
           <h1>Créer un compte</h1>

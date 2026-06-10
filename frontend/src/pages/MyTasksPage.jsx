@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { tasksApi } from '../api/tasks.js'
 import { useToast } from '../context/ToastContext.jsx'
 import { Loading, Empty, Badge, Select } from '../components/ui.jsx'
+import { Icon } from '../components/Icons.jsx'
 import { TASK_STATUS, label, TYPE_ICON } from '../lib/constants.js'
 import { formatDate } from '../lib/format.js'
 
@@ -38,7 +39,7 @@ export default function MyTasksPage() {
       {loading ? (
         <Loading />
       ) : tasks.length === 0 ? (
-        <Empty icon="☑" title="Rien ne vous est assigné">Les tâches qui vous seront attribuées apparaîtront ici.</Empty>
+        <Empty icon={<Icon name="tasks" size={22} />} title="Rien ne vous est assigné">Les tâches qui vous seront attribuées apparaîtront ici.</Empty>
       ) : (
         <div className="card">
           <table className="table">

@@ -5,6 +5,7 @@ import { sprintsApi } from '../api/sprints.js'
 import { useToast } from '../context/ToastContext.jsx'
 import { useAuth } from '../context/AuthContext.jsx'
 import { Loading, Empty, Badge, Field, Input, Textarea, EnumSelect } from '../components/ui.jsx'
+import { Icon } from '../components/Icons.jsx'
 import { ConfirmDialog } from '../components/Modal.jsx'
 import { PROJECT_STATUS } from '../lib/constants.js'
 import BoardTab from '../components/project/BoardTab.jsx'
@@ -48,7 +49,7 @@ export default function ProjectDetailPage() {
 
   if (loading) return <Loading />
   if (notFound) {
-    return <Empty icon="🔒" title="Projet introuvable">
+    return <Empty icon={<Icon name="lock" size={22} />} title="Projet introuvable">
       Ce projet n'existe pas ou vous n'y avez pas accès.
       <div className="mt-16"><Link className="btn" to="/projects">← Retour aux projets</Link></div>
     </Empty>

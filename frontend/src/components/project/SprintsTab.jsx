@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react'
 import { sprintsApi } from '../../api/sprints.js'
 import { useToast } from '../../context/ToastContext.jsx'
 import { Loading, Empty, Badge, Field, Input, Textarea, Select } from '../ui.jsx'
+import { Icon } from '../Icons.jsx'
 import { Modal, ConfirmDialog } from '../Modal.jsx'
 import { SPRINT_STATUS, label } from '../../lib/constants.js'
 import { formatDate } from '../../lib/format.js'
@@ -61,7 +62,7 @@ export default function SprintsTab({ project, onChange }) {
       </div>
 
       {sprints.length === 0 ? (
-        <Empty icon="🏃" title="Aucun sprint">Planifiez un sprint pour organiser le travail dans le temps.</Empty>
+        <Empty icon={<Icon name="flag" size={22} />} title="Aucun sprint">Planifiez un sprint pour organiser le travail dans le temps.</Empty>
       ) : (
         <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))' }}>
           {sprints.map((s) => (

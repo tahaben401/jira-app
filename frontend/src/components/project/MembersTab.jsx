@@ -4,6 +4,7 @@ import { authApi } from '../../api/auth.js'
 import { useToast } from '../../context/ToastContext.jsx'
 import { useAuth } from '../../context/AuthContext.jsx'
 import { Empty, Badge, Avatar, Field, Input, EnumSelect, Select } from '../ui.jsx'
+import { Icon } from '../Icons.jsx'
 import { Modal, ConfirmDialog } from '../Modal.jsx'
 import { MEMBER_ROLES, label } from '../../lib/constants.js'
 import { formatDate } from '../../lib/format.js'
@@ -41,7 +42,7 @@ export default function MembersTab({ project, canManage, onChange }) {
       </div>
 
       {members.length === 0 ? (
-        <Empty icon="👥" title="Aucun membre">
+        <Empty icon={<Icon name="users" size={22} />} title="Aucun membre">
           {canManage ? 'Invitez des collaborateurs pour partager ce projet.' : 'Le propriétaire n’a invité personne pour le moment.'}
         </Empty>
       ) : (

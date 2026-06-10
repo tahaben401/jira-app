@@ -4,6 +4,7 @@ import { projectsApi } from '../api/projects.js'
 import { useToast } from '../context/ToastContext.jsx'
 import { useAuth } from '../context/AuthContext.jsx'
 import { Loading, Empty, Badge, Field, Input, Textarea } from '../components/ui.jsx'
+import { Icon } from '../components/Icons.jsx'
 import { Modal } from '../components/Modal.jsx'
 
 export default function ProjectsPage() {
@@ -36,7 +37,7 @@ export default function ProjectsPage() {
       {loading ? (
         <Loading />
       ) : projects.length === 0 ? (
-        <Empty icon="▦" title="Aucun projet pour l'instant">
+        <Empty icon={<Icon name="board" size={22} />} title="Aucun projet pour l'instant">
           Créez votre premier projet pour commencer à organiser le travail.
           <div className="mt-16"><button className="btn btn-primary" onClick={() => setCreating(true)}>+ Nouveau projet</button></div>
         </Empty>
@@ -50,8 +51,8 @@ export default function ProjectsPage() {
               </div>
               <p className="desc">{p.description || 'Aucune description.'}</p>
               <div className="meta">
-                <span>👤 {p.memberCount} membre{p.memberCount > 1 ? 's' : ''}</span>
-                {p.ownerId === user?.id && <span className="badge badge-slate" style={{ height: 20 }}>Propriétaire</span>}
+                <span className="flex items-center gap-6"><span className="ic"><Icon name="users" size={14} /></span>{p.memberCount} membre{p.memberCount > 1 ? 's' : ''}</span>
+                {p.ownerId === user?.id && <span className="badge badge-slate right">Propriétaire</span>}
               </div>
             </div>
           ))}
