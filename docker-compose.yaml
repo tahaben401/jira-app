@@ -174,7 +174,11 @@ services:
       INTERNAL_SERVICE_TOKEN: ${INTERNAL_SERVICE_TOKEN:-mysecret123}
 
   api-gateway:
-    image: project-managment-app-api-gateway
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        MODULE: infrastructure/Api-gateway
     container_name: pm_api_gateway
     restart: unless-stopped
     depends_on:
