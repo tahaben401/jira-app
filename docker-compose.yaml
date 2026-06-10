@@ -174,11 +174,7 @@ services:
       INTERNAL_SERVICE_TOKEN: ${INTERNAL_SERVICE_TOKEN:-mysecret123}
 
   api-gateway:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        MODULE: infrastructure/Api-gateway
+    image: project-managment-app-api-gateway
     container_name: pm_api_gateway
     restart: unless-stopped
     depends_on:
@@ -194,6 +190,8 @@ services:
       SERVER_PORT: 8080
       EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://eureka-service:8761/eureka/
       AUTH_SERVICE_BASE_URL: http://auth-service:8081
+    volumes:
+      - ./infrastructure/Api-gateway/src/main/resources/application.yml:/app/application.yml
 
 volumes:
   postgres_data:

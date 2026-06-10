@@ -6,7 +6,9 @@
     <file url="file://$PROJECT_DIR$/infrastructure/Config-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/infrastructure/Eureka-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/services/auth-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/services/notification-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/services/project-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/services/sprint-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/services/task-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
